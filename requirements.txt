@@ -1,0 +1,12 @@
+python-binance>=1.0.15
+pandas-ta
+python-dotenv
+websockets
+pandas
+psycopg2-binary
+scikit-learn
+ddgs
+beautifulsoup4
+pypdf
+statsmodels
+numpy
