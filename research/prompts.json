@@ -1,0 +1,34 @@
+{
+  "prompts": [
+    {
+      "name": "Basic Explanation",
+      "description": "Explain a concept in simple terms with optional context.",
+      "template": "Explain the concept of {concept} in simple terms. Context: {context}.",
+      "variables": ["concept", "context"]
+    },
+    {
+      "name": "Trading Strategy",
+      "description": "Generate a trading strategy based on market conditions and historical data.",
+      "template": "Generate a trading strategy for {symbol} based on the following market conditions: {conditions}. Historical data: {historical_data}.",
+      "variables": ["symbol", "conditions", "historical_data"]
+    },
+    {
+      "name": "Market Analysis",
+      "description": "Analyze market trends and provide insights with historical context.",
+      "template": "Analyze the current market trends for {symbol} and provide insights on potential future movements. Historical context: {historical_context}.",
+      "variables": ["symbol", "historical_context"]
+    },
+    {
+      "name": "Risk Assessment",
+      "description": "Assess the risk of a trading strategy with user preferences.",
+      "template": "Assess the risk of the following trading strategy: {strategy}. Provide a risk score from 1 to 10. User preferences: {preferences}.",
+      "variables": ["strategy", "preferences"]
+    },
+    {
+      "name": "Sentiment Analysis",
+      "description": "Analyze the sentiment of a news article or social media post with context.",
+      "template": "Analyze the sentiment of the following text: {text}. Provide a sentiment score from -1 to 1. Context: {context}.",
+      "variables": ["text", "context"]
+    }
+  ]
+}

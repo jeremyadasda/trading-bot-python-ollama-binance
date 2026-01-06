@@ -1,0 +1,44 @@
+# Ignore files that don't affect the build
+.DS_Store
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.sqlite3
+*.db
+*.log
+*.env
+*.env.*
+.git/
+.gitignore
+.Dockerignore
+.dockerignore
+README.md
+LICENSE
+
+# Ignore IDE files
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore build and distribution directories
+build/
+dist/
+*.egg-info/
+
+# Ignore local development files
+venv/
+.env
+.env.*
+
+# Ignore data and storage directories that should be volumes
+data/
+storage/
+shared/
+
+# Ignore test and temporary files
+*.tmp
+*.bak
+*.swp
+*~

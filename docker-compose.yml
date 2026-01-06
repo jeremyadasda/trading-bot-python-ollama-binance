@@ -43,26 +43,48 @@ services:
 
   # --- EJECUTOR: Tu Bot de Python ---
   trading_bot:
-    build: .
-    depends_on:
-      ollama:
-        condition: service_started
-      db: # Update db dependency to wait for its healthcheck
-        condition: service_healthy
-    environment:
-      - BINANCE_API_KEY=${BINANCE_API_KEY}
-      - BINANCE_API_SECRET=${BINANCE_API_SECRET}
-      - SYMBOL=${SYMBOL:-BTCUSDT}
-      - OLLAMA_BASE_URL=http://ollama:11434
-      # Database connection string for the bot
-      - DATABASE_URL=postgresql://${DB_USER:-trader}:${DB_PASSWORD:-secure_password}@db:5432/${DB_NAME:-trading_data}
-    volumes:
-      - ./bot_logic:/app/bot_logic
-      - trading_data:/app/shared
-    command: python -u bot_logic/main.py
-    tty: true
-    networks:
-      - trading_net
+   build: .
+   depends_on:
+     ollama:
+       condition: service_started
+     db: # Update db dependency to wait for its healthcheck
+       condition: service_healthy
+   environment:
+     - BINANCE_API_KEY=${BINANCE_API_KEY}
+     - BINANCE_API_SECRET=${BINANCE_API_SECRET}
+     - SYMBOL=${SYMBOL:-BTCUSDT}
+     - OLLAMA_BASE_URL=http://ollama:11434
+     # Database connection string for the bot
+     - DATABASE_URL=postgresql://${DB_USER:-trader}:${DB_PASSWORD:-secure_password}@db:5432/${DB_NAME:-trading_data}
+   volumes:
+     - ./bot_logic:/app/bot_logic
+     - trading_data:/app/shared
+   command: python -u bot_logic/main.py
+   tty: true
+   networks:
+     - trading_net
+   # Ensure only one instance runs
+   restart: unless-stopped
+
+  # --- INVESTIGACIÓN: Entorno para Ingeniería de Prompts ---
+  research:
+   build:
+     context: .
+     dockerfile: research/Dockerfile
+   depends_on:
+     ollama:
+       condition: service_started
+   environment:
+     - OLLAMA_BASE_URL=http://ollama:11434
+   volumes:
+     - ./research:/app/research
+     - ./bot_logic:/app/bot_logic
+     - trading_data:/app/shared
+   command: python -u research/main.py
+   tty: true
+   networks:
+     - trading_net
+   restart: unless-stopped
 
 networks:
   trading_net:

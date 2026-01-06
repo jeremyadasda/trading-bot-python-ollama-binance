@@ -1,5 +1,4 @@
 import pandas as pd
-import pandas_ta as ta
 from binance.client import Client
 import time
 import os

@@ -229,7 +229,7 @@ class DatabaseHandler:
             return "Could not retrieve recent trades."
 
     def prune_database(self, max_rows=10000):
-        # Postgres can handle more, but let's keep a loose limit if desired. 
+        # Postgres can handle more, but let's keep a loose limit if desired.
         # Actually with Postgres we rarely need to prune by lines unless specific requirement.
         # I'll implement a basic cleanup if table gets massive, effectively retaining last N rows.
         try:
@@ -240,16 +240,35 @@ class DatabaseHandler:
                 if count > max_rows:
                     print(f"Pruning database (Row count: {count})...")
                     cur.execute('''
-                        DELETE FROM decisions_log 
+                        DELETE FROM decisions_log
                         WHERE id IN (
-                            SELECT id FROM decisions_log 
-                            ORDER BY id ASC 
+                            SELECT id FROM decisions_log
+                            ORDER BY id ASC
                             LIMIT %s
                         )
                     ''', (count - max_rows,))
                     print("Database pruned.")
         except Exception as e:
             print(f"Error pruning database: {e}")
+
+    def get_last_entry_price(self, symbol):
+        """Get the entry price for the most recent BUY trade of a symbol."""
+        try:
+            with self.get_cursor() as cur:
+                cur.execute('''
+                    SELECT actual_price
+                    FROM decisions_log
+                    WHERE symbol = %s
+                      AND actual_action = 'BUY'
+                      AND trade_type = 'STRATEGIC'
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                ''', (symbol,))
+                result = cur.fetchone()
+                return float(result[0]) if result else None
+        except Exception as e:
+            print(f"Error getting last entry price: {e}")
+            return None
 
     def is_url_researched(self, url):
         """Check if a URL has already been processed."""

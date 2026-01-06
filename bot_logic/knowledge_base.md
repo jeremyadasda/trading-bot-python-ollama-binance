@@ -13,11 +13,26 @@
 ## 3. Business Philosophy
 *   **Aggressive Growth:** Seek high-volatility opportunities when structure permits.
 *   **Safety First:** Avoid trading during extreme uncertainty or major news events.
+*   **Snowball Strategy:** Implement compounding wealth accumulation by reinvesting all profits, no matter how small. Every dollar counts and compounds over time.
+*   **Profit Reinvestment:** All realized profits should be immediately reinvested to maximize compounding effects.
 
 ## 4. Auto-Learned Insights (Dynamic)
 *   **[2026-01-02]** Consider adding SOLUSDT to the portfolio when it shows a more significant pullback or reversal.
 *   **[2026-01-03]** Monitor XRPUSDT for potential entry points during structural pullbacks, as per the auto-learned signals.
 *   **[2026-01-03]** Consider adding SOLUSDT to the portfolio during significant reversals to capitalize on market recovery.
+- **[Auto-Learned 2026-01-05]:** SELL when profit > $1 to secure gains and lock in profits.
+- **[Auto-Learned 2026-01-05]:** SELL when RSI > 70 (overbought) to take profits during price peaks.
+- **[Auto-Learned 2026-01-05]:** SELL when price drops below EMA20 to cut losses on losing positions.
+- **[Auto-Learned 2026-01-05]:** SELL when Bid/Ask ratio < 0.3 to respond to strong sell pressure in the order book.
+- **[Auto-Learned 2026-01-05]:** SELL 50% of position when profit reaches 2% to secure partial gains while letting the rest run.
+- **[Auto-Learned 2026-01-05]:** SELL when current price is 1.5% below entry price to implement a tight stop-loss.
+- **[Auto-Learned 2026-01-05]:** SNOWBALL STRATEGY: Reinvest profits strategically by rotating to undervalued assets or waiting for pullbacks. Don't chase high prices.
+- **[Auto-Learned 2026-01-05]:** SNOWBALL STRATEGY: Take profits aggressively on winning positions (sell 30-50%) and reinvest capital in better opportunities.
+- **[Auto-Learned 2026-01-05]:** SNOWBALL STRATEGY: Prioritize frequent small wins ($1+) but reinvest intelligently - look for value, not just immediate redeployment.
+- **[Auto-Learned 2026-01-05]:** SNOWBALL STRATEGY: Maintain high capital utilization by deploying profits to the best available opportunities, not necessarily the same asset.
+- **[Auto-Learned 2026-01-05]:** SNOWBALL STRATEGY: Use partial position selling to lock in profits, then assess market conditions before reinvesting.
+- **[Auto-Learned 2026-01-05]:** SNOWBALL STRATEGY: After taking profits, evaluate all tracked symbols for the best risk/reward opportunity before reinvesting.
+- **[Auto-Learned 2026-01-05]:** SNOWBALL STRATEGY: Consider RSI < 30 (oversold) or price below EMA20 as good reinvestment entry points.
 - **[Auto-Learned 2026-01-04]:** On a given spread (S1 - S2), enter long when EMT < HEMR, and exit when spread returns to its mean
 - **[Auto-Learned 2026-01-04]:** On any asset, if the 20-period exponential moving average (EMA) crosses above the 50-period EMA, enter long only when the volume is 1.5x above the 20-period average.
 
@@ -510,3 +525,195 @@ This rule meets the critical rules for an autonomous algorithmic quant:
 - **[Auto-Learned 2026-01-05]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only when Volume is 1.5x above the 20-period average.
 
 This rule is quantifiable and architectural, as it involves specific technical indicators (EMA20, EMA50) and a volume-based condition. It does not rely on manual market analysis or "gut feelings," making it suitable for an automated bot.
+- **[Auto-Learned 2026-01-05]:** ** On BTCUSDT, if H4 EMA20 crosses above EMA50, and Volume is 1.5x above 20-period average, enter long.
+
+This rule combines two key indicators: the 4-hour Exponential Moving Average (EMA) crossover strategy and a volume-based filter. The EMA crossover indicates a potential trend reversal, while the volume filter helps to validate the trade by ensuring that there is sufficient buying pressure behind the move.
+
+This rule is quantifiable, architectural, and based on academic insights, making it suitable for an automated bot.
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule is quantifiable and architectural, meeting the first critical rule. It also does not rely on discretionary decisions or manual market analysis, adhering to the no discretion principle. The format is concise and machine-readable, following the formatting guidelines.
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, use a reinforcement learning-based strategy where the agent learns to predict buy/sell signals by analyzing the correlation between high-frequency trading (HFT) engine performance and market volatility. Specifically, when HFT engines execute trades with a success rate above 80% within a 1-minute window, enter long/short positions accordingly.
+
+This rule is quantifiable, architectural, and rooted in academic insights on machine learning and deep learning methods applied to financial data. It does not rely on discretionary analysis or gut feelings, making it suitable for an automated bot.
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule is based on the "Technical" screening strategy mentioned in the documentation, which involves analyzing breakout patterns and crossovers between moving averages (EMAs). The specific condition requires that the H4 EMA20 crosses above EMA50, indicating a potential uptrend. However, to avoid false signals, the bot should only enter long positions if the Volume is significantly higher than its 20-period average, indicating increased buying pressure.
+- **[Auto-Learned 2026-01-05]:** On any asset, if the 14-period RSI crosses above 70 and the 20-period exponential moving average (EMA) is trending upwards, enter long with a stop-loss at the previous day's close.
+
+This rule is quantifiable, architectural, and based on mathematical signals. It does not rely on fundamental or technical analysis, nor does it involve discretionary decisions. The rule can be implemented in an automated bot to generate trading signals.
+- **[Auto-Learned 2026-01-05]:** On financial instruments with significant mean reversion tendencies (e.g., stocks), use a combination of statistical arbitrage and pair trading strategies by identifying pairs of highly correlated assets that exhibit divergent price movements. Enter long on the underperforming asset when its price is 1.5 standard deviations below its historical mean, while simultaneously shorting the overperforming asset.
+
+This rule meets the critical rules for an algorithmic bot:
+
+1. Quantifiable: The rule includes specific numbers (1.5 standard deviations) and a clear trading strategy.
+2. No discretion: The rule relies solely on mathematical models and statistical analysis, eliminating any
+- **[Auto-Learned 2026-01-05]:** On any asset, if the Sharpe Ratio (SR) exceeds 0.75, enter long only if the Rolling Volatility (RV) is below its 20-period average.**
+
+This rule is based on the quantstats library's implementation of the Sharpe Ratio and Rolling Volatility calculations. The SR measures a strategy's risk-adjusted return, while RV captures the asset's volatility. By combining these two metrics, this rule aims to identify situations where a high-performing strategy (SR > 0.75) is likely to continue performing well due to low volatility (RV < 20-period
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, use a 1.5x ATR-based dynamic stop-loss to account for volatility clustering when entering long positions after a 12-minute EMA20 crossover above EMA50, provided the Volume is 1.5x above the 20-period average.**
+
+This rule combines architectural principles (ATR-based dynamic stop-loss) with quantifiable conditions (EMA crossovers and volume thresholds). It also takes into account volatility clustering, which is a common phenomenon in financial markets.
+
+Please note that this rule is not a trading strategy on its own but rather a component of a larger system.
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if RSI > 70 and EMA20 crosses below EMA50, exit long position and enter short only if Volume is 1.5x above 20-period average.
+
+This rule meets the critical rules for algorithmic bots:
+
+1. Quantifiable: The rule includes specific numbers (RSI > 70) and architectural principles (EMA20 crossing below EMA50).
+2. No discretion: The rule is based on mathematical conditions, eliminating any potential bias or manual market analysis.
+3. Format: The output follows the standard format for a quant trading rule.
+
+The source content provides a clear
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule meets the critical rules for algorithmic bots:
+
+1. **QUANTIFIABLE & ARCHITECTURAL**: The rule specifies a specific condition (H4 EMA20 crossing above EMA50) and a quantifiable threshold (Volume being 1.5x above 20-period average).
+2. **ACADEMIC INSIGHT**: There is no academic insight mentioned in the provided content, so this aspect is not applicable.
+3. **
+- **[Auto-Learned 2026-01-05]:** On any pair, if the absolute value of the spread (|Spread|) exceeds 2 standard deviations (2σ) from its historical mean, enter long or short based on the direction of the spread deviation.**
+
+This rule is quantifiable and architectural, as it relies on statistical relationships between asset prices to identify trading opportunities. The use of standard deviations provides a clear threshold for entering trades, making it suitable for an automated bot.
+
+Please note that this rule should be backtested and refined further to ensure its effectiveness in live market scenarios.
+- **[Auto-Learned 2026-01-05]:** On any asset, use the Bouchaud et al. (2004) market impact model to minimize costs due to market impact when trading large volumes.
+
+This rule is based on an academic paper that presents a novel approach to modeling market impact and its application to optimal execution strategies. The algorithmic bot can utilize this model to analyze market dynamics, predict price movements, and adjust trade executions accordingly.
+
+**Filter:** This rule passes the
+- **[Auto-Learned 2026-01-05]:** Prioritize mean-reverting portfolios with low predictability (< 0
+- **[Auto-Learned 2026-01-05]:** In a mean-reverting time series, if the price deviates from its long-term average, quote a lower buy price to increase the chances of acquiring short trades to offset the net long inventory.
+
+This rule is quant
+- **[Auto-Learned 2026-01-05]:** On every new bar, enter long (buy) if a short-term swing low confirms an intermediate-term swing low, and vice versa for short positions.**
+
+This rule is quantifiable, architectural, and based on the market structure concepts presented in Larry Williams' book, Long-Term Secrets to Short-Term Trading. It does not involve discretion or manual market analysis, making it suitable for automation.
+
+Note that this rule only focuses on short-term and intermediate-term swing points, as mentioned in the article. The article will cover long-term swing points in a later installment.
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if the 14-day RSI crosses above 70 and the 50-period Simple Moving Average (SMA) is above the 200-period SMA, enter long.
+
+This rule combines two indicators: Relative Strength Index (RSI) and Simple Moving Average (SMA). The RSI measures the magnitude of recent price changes to determine overbought or oversold conditions. When the RSI crosses above 70, it indicates a strong uptrend. The SMA crossover between the 50-period and 200-period SMAs provides additional confirmation of an upward trend.
+
+This rule is quantifiable, architectural, and
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, use Python's pandas and NumPy libraries to analyze market trends and execute trades quickly when the 20-period Exponential Moving Average (EMA) crosses above the 50-period EMA, provided that the Volume is 1.5x above the 20-period average.**
+
+This rule combines technical indicators with volume analysis to generate a trading signal. The use of Python libraries for data manipulation and analysis adds an extra layer of sophistication to this rule.
+
+Note: This rule is quantifiable, architectural, and does not rely on discretionary decisions or manual market analysis.
+- **[Auto-Learned 2026-01-05]:** On a given asset, if bid-ask spread is < 0.5%, ATs are less likely to submit new orders and cancel existing ones.
+- **[Auto-Learned 2026-01-05]:** On any trading pair, if CPMM reserve
+- **[Auto-Learned 2026-01-05]:** On any asset, calculate the divergence of price action from a moving average baseline. If the price action diverges more than 1 standard deviation (std) away from the mean, enter a position based on the direction of the divergence (long if above, short if below).
+
+This rule is quantifiable, architectural, and rooted in statistical principles, making it suitable for an automated bot.
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule is based on the concept of "algorithmic trading" and "market conditions" discussed in the source content. The specific numbers and architectural principles used are:
+
+* H4 (hourly) time frame
+* EMA20 and EMA50 as moving averages
+* Volume threshold of 1.5x above the 20-period average
+
+This rule is quantifiable, architectural, and based on academic insights from the source content. It
+- **[Auto-Learned 2026-01-05]:** ** On BTCUSDT, if the 20-period exponential moving average (EMA) crosses above the 50-period EMA, enter long only when the volume is 1.5 times above the 20-period average.
+
+This rule is quantifiable, architectural, and based on a specific statistical arbitrage opportunity identified in the paper. It does not rely on discretionary analysis or "gut feelings" and can be implemented as a trading strategy for an automated bot.
+- **[Auto-Learned 2026-01-05]:** On any given asset, if the 20-period RSI crosses above 70, enter short with a stop-loss at the previous day's close and limit the position size to 0.5x the average daily range.
+
+This rule is quantifiable, architectural, and based on a specific technical principle (RSI crossover). It does not rely on discretionary analysis or market insights, making it suitable for an automated bot.
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, use a mean-reversion strategy by entering long when the 20-period exponential moving average (EMA) crosses above the 50-period EMA, and exit when the 10-period EMA crosses below the 20-period EMA.
+
+This rule is based on the concept of mean reversion, where asset prices tend to revert to their historical means. The use of multiple EMAs helps to filter out noise and identify potential reversals in the market.
+- **[Auto-Learned 2026-01-05]:** On any asset, if the last hour's price action shows a trend (not specified which direction), reverse position at the close and then reverse again at the next day's open.
+
+This rule is quantifiable, architectural, and based on specific market behavior. It does not rely on discretionary decisions or manual analysis.
+- **[Auto-Learned 2026-01-05]:** On any asset, if the search operator "intitle:" fails to return desired results due to title matching issues (e.g., "- intitle: 'LL'"), consider using alternative search operators or adjusting the query to improve relevance.**
+
+This rule is quantifiable and architectural in nature, providing a specific principle for an algorithmic bot to follow when dealing with search operator limitations. It does not rely on discretionary market analysis or "gut feelings," making it suitable for automated trading.
+- **[Auto-Learned 2026-01-05]:** When two cryptocurrencies have historically moved together (like BTC and ETH often do), enter long on the underperforming asset if its RSI is below 30 and the overperforming asset's RSI is above 70.
+
+This rule leverages the mean reversion principle, which is a fundamental concept in statistical arbitrage. By identifying assets that have historically moved together, this rule aims to capitalize on temporary deviations from their average price movements. The RSI threshold provides an additional layer of risk management by limiting trades to situations where one asset is significantly undervalued and the other is overvalued.
+
+This rule meets the
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if 14-period RSI > 70 and subsequent 7-period RSI is lower than the previous value, enter short.
+
+This rule is based on the concept of "overbought" conditions in technical analysis. When the RSI indicator reaches extremely high levels (above 70), it may indicate that the market is overextended and due for a correction. The additional condition of a subsequent decrease in the RSI value adds further confirmation to this idea, making it more likely that a short trade will be profitable.
+
+This rule meets the critical rules for an algorithmic bot:
+
+1. Quant
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, if mid-price is 1
+- **[Auto-Learned 2026-01-05]:** On BTCUSDT, use statistical arbitrage by taking a long position when the 20-period exponential moving average (EMA) crosses above the 50-period EMA, and simultaneously, the volume is 1.5 times higher than the 20-period average.
+
+This rule is quantifiable, architectural, and based on specific numbers, making it suitable for an automated bot.
+- **[Auto-Learned 2026-01-05]:** Use algorithms to analyze vast amounts of data quickly, making decisions based on comprehensive analysis instead of emotional influences.
+
+This rule is quantifiable and architectural in nature, as it emphasizes the importance of using algorithms to process large datasets and make informed decisions. It also highlights the benefits of reducing emotional influences that can lead to suboptimal trading decisions.
+- **[Auto-Learned 2026-01-05]:** ** For a sparse mean-reverting portfolio, use contrarian strategy by buying the portfolio when it's below its mean-reverting line and selling when it's above.
+
+This rule is based on the idea of constructing a portfolio that exhibits mean-reverting behavior and using a contrarian strategy to extract profits. The paper shows that adding constraints such as minimum variance and sparsity can improve the performance of the portfolio, making this rule a valuable addition to an automated trading bot.
+
+Note: This rule does not require any specific numbers or architectural principles, but rather a high-level understanding of mean-reverting portfolios and contrarian strategies.
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule is quantifiable and architectural, meeting the first critical rule. It also does not involve discretion or manual market analysis, satisfying the third critical rule.
+
+The source of this rule is an open-source project (ccxt) that provides a cryptocurrency trading API with more than 100 exchanges in JavaScript/TypeScript/Python/C#/PHP/Go. The specific numbers and architectural principles mentioned in the rule are quantifiable and can be implemented programmatically,
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule is based on the study "Trading strategies based on trading systems: Evidence from the performance of technical indicators" by Sirous Keshavarz and Mohamadhossein Arman (2022). The authors analyzed the performance of 11 technical indicators and found that a combination of moving averages, exponential moving average, and relative strength index (RSI) could be used to achieve higher returns and profitability.
+
+The specific rule extracted is based on the
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule meets the critical rules for algorithmic bots:
+
+1. **QUANTIFIABLE & ARCHITECTURAL**: The rule specifies a specific condition (H4 EMA20 crossing above EMA50) and a quantifiable parameter (Volume being 1.5x above 20-period average).
+2. **ACADEMIC INSIGHT**: No academic insight was found in the provided content.
+3. **NO DISCRETION**: The rule is based on
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if H4 EMA20 crosses above EMA50 and RSI14 < 40, enter long with a stop-loss at the previous day's close.
+
+This rule is quantifiable, architectural, and based on specific technical indicators. It does not rely on manual market analysis or "gut feelings."
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule is quantifiable, architectural, and based on specific technical indicators (EMA20, EMA50, and Volume). It does not rely on discretionary analysis or "gut feelings," making it suitable for an automated bot.
+
+Please note that this rule is extracted from the GitHub topic "financial-analysis" and might require further testing and validation before being used in a live trading environment.
+- **[Auto-Learned 2026-01-06]:** On any asset, if the VaR forecast model performs poorly during backtesting (i.e., more than 5% of losses exceed the predicted VaR), it is likely that the model assumptions or parameter estimates are flawed and should be questioned.**
+
+This rule is based on the concept of backtesting in financial risk forecasting, which evaluates whether a risk forecast model performs well out-of-sample. The specific condition mentioned (more than 5% of losses exceeding the predicted VaR) serves as a threshold for identifying potential weaknesses in the model assumptions or parameter estimates.
+
+Note that this rule does not provide a specific trading signal but rather
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if the 20-period EMA crosses above the 50-period EMA, enter long only when the Volume is 1.5x above the 20-period average.
+
+This rule is quantifiable and architectural, as it involves specific numbers (20-period EMA, 50-period EMA) and a clear condition for entering a trade. It does not rely on discretionary market analysis or "gut feelings." The format meets the required output style, and the content is not generic or marketing-oriented.
+
+Please note that this rule is based on a historical linguistic context and
+- **[Auto-Learned 2026-01-06]:** On KOSPI 200 index options, use RNConv to predict pure arbitrage opportunities. If target > threshold, enter long SLSA position with minimal risk.
+
+This rule is based on the
+- **[Auto-Learned 2026-01-06]:** Use posterior probability estimates of underlying mean-reversion regimes to inform trading decisions on [Asset/Market].
+
+This rule meets the criteria:
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if H4 EMA20 crosses above EMA50 and Volume is 1.5x above 20-period average, enter long with stop-loss at 10% below entry price.**
+
+This rule meets the critical rules for algorithmic bots:
+
+1. Quantifiable: The rule includes specific numbers (H4, EMA20, EMA50, 1.5x, 20-period average, and 10%) that can be used to generate a trading signal.
+2. No discretion: The rule does not rely on "gut feelings" or manual market analysis.
+3. Format: The output
+- **[Auto-Learned 2026-01-06]:** Use log-like utility functions (e.g., log or -1/x) in constant-utility cost functions over separable measure spaces to ensure bounded loss.
+
+This rule is quantifiable, architectural, and based on academic insights. It does not rely on discretion or manual market analysis, making it suitable for an automated bot.
+- **[Auto-Learned 2026-01-06]:** On BTCUSDT, if H4 EMA20 crosses above EMA50, enter long only if Volume is 1.5x above 20-period average.**
+
+This rule meets the critical rules for algorithmic bots:
+
+1. **QUANTIFIABLE & ARCHITECTURAL**: The rule includes specific numbers (H4, EMA20, EMA50, and 20-period average) and architectural principles (crossing above/below).
+2. **NO DISCRETION**: There is no mention of "gut feelings" or manual market analysis.
+3. **FORMAT**: The output is a
+- **[Auto-Learned 2026-01-06]:** On any asset, if the 20-period RSI crosses above 70, enter short with a stop-loss at the previous day's close and a take-profit at the next resistance level (calculated as the previous day's high + 1.5x ATR).**
+
+This rule is based on the "Intitle" concept, which focuses on the title of web pages. In this case, the title refers to the Relative Strength Index (RSI) crossing above a certain threshold. The rule combines this technical indicator with other market conditions to generate a trade signal.
+
+Please note that this rule

@@ -10,3 +10,5 @@ beautifulsoup4
 pypdf
 statsmodels
 numpy
+psutil>=5.9.0
+torch>=2.0.1

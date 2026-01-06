@@ -63,7 +63,7 @@ def acquire_lock():
                 
     except Exception as e:
         log_pid(f"Singleton lock error: {e}")
-        return True # Default to True to allow start if file system is weird
+        return False # Be strict - if we can't determine lock status, don't start
 
 
 
@@ -165,6 +165,30 @@ def main_loop():
     
     if not acquire_lock():
         return
+    
+    # Additional safety check - verify no other instances are running
+    import psutil
+    import sys
+    current_pid = os.getpid()
+    current_process = psutil.Process(current_pid)
+    current_name = current_process.name()
+    
+    # Check for other Python processes running the same script
+    duplicate_instances = []
+    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+        try:
+            if proc.info['pid'] != current_pid and proc.info['name'] == current_name:
+                cmdline = proc.info['cmdline']
+                if cmdline and len(cmdline) > 1 and 'bot_logic/main.py' in cmdline[1]:
+                    duplicate_instances.append(proc.info['pid'])
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            continue
+    
+    if duplicate_instances:
+        log_pid(f"ABORT: Found {len(duplicate_instances)} duplicate bot instances running: {duplicate_instances}")
+        log_pid("Only one instance should run at a time. Close the other processes first.")
+        return
+    
     log_pid("Starting Modular AI Trading Terminal...")
 
     # 1. Initialize DB
@@ -328,10 +352,142 @@ def main_loop():
                     # We take a blend or the AI's cap if it's more conservative
                     quantity = float(min(quantity, kelly_qty) if quantity > 0 else kelly_qty)
                     reasoning += f"\n[Kelly Optimization]: Adjusting size to {quantity*100:.1f}% based on statistical confidence."
+                
+                # D3. Profit-Taking & Snowball Strategy
+                # Check if we have open positions and if we should take profits
+                elif decision == "HOLD":
+                    # Check for profit-taking opportunities even when AI says HOLD
+                    asset = symbol.replace('USDT', '')
+                    asset_balance = next((float(b['free']) for b in wallet_info.get('balances', []) if b['asset'] == asset), 0.0)
+                    
+                    if asset_balance > 0:
+                        # Get entry price from recent trades
+                        entry_price = db.get_last_entry_price(symbol)
+                        current_price = live_data.get('price', 0.0)
+                        if entry_price and current_price > entry_price:
+                            profit_pct = (current_price - entry_price) / entry_price * 100
+                            profit_usd = asset_balance * (current_price - entry_price)
+                            
+                            # SNOWBALL STRATEGY: Aggressive profit-taking for compounding
+                            if profit_usd > 1.0:  # Take profits if > $1
+                                decision = "SELL"
+                                quantity = 0.4  # Sell 40% of position to lock in gains
+                                reasoning = f"[SNOWBALL]: Securing ${profit_usd:.2f} profit ({profit_pct:.2f}%). Selling 40% to reinvest capital immediately."
+                                rule_citation = "Auto-Learned 2026-01-05: SNOWBALL STRATEGY - Take profits aggressively and reinvest"
+                                log_pid(f"SNOWBALL PROFIT-TAKING: {symbol} - ${profit_usd:.2f} profit detected. Preparing to reinvest.")
+                            elif profit_pct > 1.5:  # Take profits if > 1.5%
+                                decision = "SELL"
+                                quantity = 0.25  # Sell 25% of position
+                                reasoning = f"[SNOWBALL]: Securing {profit_pct:.2f}% profit. Selling 25% to compound capital faster."
+                                rule_citation = "Auto-Learned 2026-01-05: SNOWBALL STRATEGY - Frequent small wins for compounding"
+                                log_pid(f"SNOWBALL PROFIT-TAKING: {symbol} - {profit_pct:.2f}% profit detected. Compound cycle initiated.")
 
                 # D. Execution
                 full_reasoning = f"[Rule Citation]: {rule_citation}\n\n{reasoning}"
                 trade_info = executor.execute_trade(symbol, decision, quantity)
+                
+                # D4. SMART SNOWBALL REINVESTMENT STRATEGY
+                # If we just took profits, strategically redeploy the capital to the best opportunity
+                if trade_info and trade_info['action'] == "SELL" and "SNOWBALL" in reasoning:
+                    # Get updated wallet info after the sell
+                    updated_wallet = executor.get_wallet_info(current_tracked_symbols)
+                    usdt_balance = next((float(b['free']) for b in updated_wallet.get('balances', []) if b['asset'] == 'USDT'), 0.0)
+                    
+                    if usdt_balance > 10.0:  # Minimum for reinvestment
+                        log_pid(f"SNOWBALL REINVESTMENT: ${usdt_balance:.2f} available. Analyzing best reinvestment opportunity...")
+                        
+                        # SMART REINVESTMENT: Find the best opportunity among all tracked symbols
+                        best_opportunity = None
+                        best_score = -float('inf')
+                        
+                        for test_symbol in current_tracked_symbols:
+                            if test_symbol == symbol:  # Avoid immediately buying back the same asset we just sold
+                                continue
+                            
+                            # Get current data for this symbol
+                            test_live_data = current_cycle_market_data.get(test_symbol, {"price": 0.0})
+                            test_price = test_live_data.get('price', 0.0)
+                            if test_price <= 0:
+                                continue
+                            
+                            # Get technical indicators for smart assessment
+                            test_df = market.get_ml_features(test_symbol)
+                            if test_df is None or len(test_df) < 20:
+                                continue
+                            
+                            # Calculate key indicators for reinvestment decision
+                            try:
+                                rsi_14 = TechnicalIndicators.calculate_rsi(test_df, 14).iloc[-1]
+                                ema_20 = TechnicalIndicators.calculate_ema(test_df, 20).iloc[-1]
+                                current_price = test_price
+                                
+                                # Score the opportunity (higher = better)
+                                score = 0
+                                
+                                # RSI-based scoring (lower RSI = better entry)
+                                if rsi_14 < 30:  # Oversold = good buying opportunity
+                                    score += 50
+                                elif rsi_14 < 50:  # Neutral = reasonable
+                                    score += 30
+                                elif rsi_14 < 70:  # Overbought = cautious
+                                    score += 10
+                                
+                                # Price vs EMA scoring (below EMA = better entry)
+                                if current_price < ema_20 * 0.98:  # Below EMA = good
+                                    score += 40
+                                elif current_price < ema_20 * 1.02:  # Near EMA = reasonable
+                                    score += 20
+                                
+                                # Volatility scoring (lower volatility = safer entry)
+                                atr_14 = TechnicalIndicators.calculate_atr(test_df, 14).iloc[-1]
+                                atr_pct = (atr_14 / current_price) * 100
+                                if atr_pct < 2:  # Low volatility
+                                    score += 30
+                                elif atr_pct < 5:  # Medium volatility
+                                    score += 15
+                                
+                                # Check if this is the best opportunity so far
+                                if score > best_score:
+                                    best_score = score
+                                    best_opportunity = {
+                                        'symbol': test_symbol,
+                                        'price': current_price,
+                                        'rsi': rsi_14,
+                                        'ema_ratio': current_price / ema_20,
+                                        'score': score,
+                                        'atr_pct': atr_pct
+                                    }
+                            
+                            except Exception as e:
+                                log_pid(f"Error analyzing {test_symbol} for reinvestment: {e}")
+                                continue
+                        
+                        # Decision based on best opportunity found
+                        if best_opportunity and best_score > 30:  # Only reinvest if we find a good opportunity
+                            best_symbol = best_opportunity['symbol']
+                            log_pid(f"SNOWBALL SMART REINVESTMENT: Best opportunity found - {best_symbol} (Score: {best_score:.0f}, RSI: {best_opportunity['rsi']:.1f}, Price/EMA: {best_opportunity['ema_ratio']:.2f})")
+                            
+                            # Set up the reinvestment trade for the next cycle
+                            decision = "BUY"
+                            quantity = min(0.6, usdt_balance / (usdt_balance + 50))  # Conservative sizing for reinvestment
+                            reasoning = f"[SMART SNOWBALL]: Reinvesting ${trade_info['usdt_amount']:.2f} profit in {best_symbol}. " \
+                                        f"Opportunity score: {best_score:.0f} (RSI: {best_opportunity['rsi']:.1f}, " \
+                                        f"Price/EMA: {best_opportunity['ema_ratio']:.2f}, ATR: {best_opportunity['atr_pct']:.1f}%)"
+                            rule_citation = "Auto-Learned 2026-01-05: SNOWBALL STRATEGY - Reinvest strategically in best available opportunity"
+                            
+                            # Log this smart reinvestment decision
+                            db.log_decision(best_symbol, "SMART_REINVEST", quantity, reasoning, None, updated_wallet,
+                                          {"snowball_amount": trade_info['usdt_amount'], "opportunity_score": best_score},
+                                          trade_type='SNOWBALL')
+                            
+                        else:
+                            # No good opportunity found - keep capital in USDT for now
+                            log_pid(f"SNOWBALL PATIENT MODE: No attractive reinvestment opportunities found (best score: {best_score:.0f}). Holding ${usdt_balance:.2f} for better entry points.")
+                            reasoning = f"[SNOWBALL PATIENT]: Secured ${trade_info['usdt_amount']:.2f} profit. Waiting for better reinvestment opportunity (RSI<30 or price<EMA)."
+                            rule_citation = "Auto-Learned 2026-01-05: SNOWBALL STRATEGY - Be patient, wait for value"
+                            db.log_decision(symbol, "PATIENT_HOLD", 0.0, reasoning, None, updated_wallet,
+                                          {"snowball_amount": trade_info['usdt_amount'], "waiting_for_value": True},
+                                          trade_type='SNOWBALL')
 
                 # E. Logging
                 if trade_info:
